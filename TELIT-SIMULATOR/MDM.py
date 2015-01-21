@@ -71,7 +71,7 @@ def getSerialSettings():
 	global PORTName
 	global BAUD
 	
-	with open("../TELITLOADER/settings.txt") as f: #using with you don't have to call close()
+	with open("../../TELITLOADER/settings.txt") as f: #using with you don't have to call close()
 	    for line in f:
 	        args=line.replace('\n','').split(" ")
 		if args[0].lower() == "port":
