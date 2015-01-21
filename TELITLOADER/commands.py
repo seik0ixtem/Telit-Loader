@@ -36,6 +36,12 @@ fileName=None
 fileLength=None
 fileInput=None
 
+# it is really a problem - without error only scripts of this size uploaded without errors
+#MAXFILESIZE=7200
+#MAXFILESIZE=32000
+CHUNKSIZE=7000
+CHUNK_SLEEP_DELAY=10
+
 
 #Gets file name from options##############################################
 def getFile():
@@ -96,9 +102,13 @@ def writeFile():
 	print fileName
 	print fileLength
 
-	if int(fileLength)>7200:
-		print "#### FILE TOO BIG 7200 byte max #####"
-		sys.exit(1)		
+	# don't know why this limitation (maybe crucial, don't really know, let's try)
+	# ok, big filesize MAY be a problem, but it's solved.
+	#  point is that after each chunk we should wait some time to get device to think a bit
+	#  or it returns ERROR
+	#if int(fileLength)>MAXFILESIZE:
+	#	print "#### FILE TOO BIG " + str(MAXFILESIZE)  + " byte max #####"
+	#	sys.exit(1)		
 	writeCommand= "AT#WSCRIPT=%s,%i\r\n" % (fileName,fileLength)
 	print "Sending:" + writeCommand
 	setPort.serialOpenCheck()			#open serial connection send AT to check
@@ -111,7 +121,11 @@ def writeFile():
 		sys.exit(1)
 	print"START FILE#########"
 	lineMarker=0
+	chunk_sent_size=0
 	for line in fileInput:
+		# + because I don't want to worry if python thinks \n and \r are counted symbols or not
+		chunk_sent_size = chunk_sent_size + len(line) + 2
+		#print "chunk_sent_size: " + str(chunk_sent_size)
 		try:	#two from back is /n/l
 			if(line[-1:] == "\r\n"):
 				writeLine=line
@@ -128,6 +142,10 @@ def writeFile():
 			print "serial timed out on line " + lineMarker	
 			setPort.serialClose()
 			sys.exit(1)
+		if (chunk_sent_size > CHUNKSIZE):
+			time.sleep(CHUNK_SLEEP_DELAY)
+			chunk_sent_size = 0
+			print "Allow device to digest data for " + str(CHUNK_SLEEP_DELAY) + " sec."
 	input = setPort.getReply()
 	for line in input:
 		if "OK\r\n" in line:
