@@ -31,10 +31,13 @@ import threading
 def send(string):
 	print string
 def sendbyte(byte):
-	
 	print "[SER] sent:" + hex(byte)
-def set_speed(bitrate):
-	print "[SER] setting bitrate:" + bitrate
+def set_speed(bitrate, char_format):
+	print "[SER] setting bitrate:" + bitrate + ", with char_format:" + char_format
+	return 1
+
+def read():
+	return "[SER.read]: dummy return"
 #######################################################
 
 
