@@ -25,6 +25,7 @@
 
 #simulation class, talks to EVK
 import serial, time
+import MDM
 global port
 
 def setup(portname):
@@ -33,18 +34,32 @@ def setup(portname):
 	port.open()
 
 def send(string, timeout):
-	global port
-	port.write(string) #pyserial doesn't have a timeout
-	print "[send]:",string
+	# using MDM-interface, because we want to make it easier to test
+	MDM.send(string, timeout)
+
+	# that is how it should (probably) be with MDM2-interface
+	#global port
+	#port.write(string) #pyserial doesn't have a timeout
+	#print "[send]:",string
 
 
 def receive(timeoutTenthOfSec):
-	global port
-	port.flushInput() #necessary?
-	sec = int((timeoutTenthOfSec+5)/10)
-	time.sleep(sec)
-	resp = port.readlines()
-	string = ''.join(resp)
-	#print "[recv]:",string
-	return string
+	# using MDM-interface, because we want to make things easier
+	mdmResult = MDM.receive(timeoutTenthOfSec)
+	return mdmResult
 
+	# that is how it should (probably) be with MDM2-interface
+	#global port
+	#port.flushInput() #necessary?
+	#sec = int((timeoutTenthOfSec+5)/10)
+	#time.sleep(sec)
+	#resp = port.readlines()
+	#string = ''.join(resp)
+	##print "[recv]:",string
+	#return string
+
+def getRI():
+	#gets Ring Indicator from AT-command
+
+	# 0 means NO RI, so it's just a "NO RI dummy"
+	return 0
