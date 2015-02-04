@@ -37,7 +37,8 @@ def set_speed(bitrate, char_format):
 	return 1
 
 def read():
-	return "[SER.read]: dummy return"
+	time.sleep(.1)
+	return "[SER.read]: dummy return\n"
 #######################################################
 
 
