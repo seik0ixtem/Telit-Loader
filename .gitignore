@@ -1,3 +1,11 @@
 # no compiled files neede
 *.pyc
 
+# Upload is more of a temporary dir
+UploadCode/*
+
+#ProtoCode is for debug
+ProtoCode/*
+
+#vim temporary
+*.swp
