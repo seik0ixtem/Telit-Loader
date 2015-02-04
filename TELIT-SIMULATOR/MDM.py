@@ -113,8 +113,11 @@ def receive(timeoutTenthOfSec):
 	resp = port.readlines()
 	#print resp
 	string = ''.join(resp)
-	#print "[recv]:"+string
+	print "[recv]:"+string
 	return string
+
+def read():
+	return receive(0);
 
 #OPEN PORT AUTOMATICALY WITH IMPORT
 getSerialSettings()
