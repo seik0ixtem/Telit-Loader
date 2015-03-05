@@ -9,3 +9,5 @@ ProtoCode/*
 
 #vim temporary
 *.swp
+
+logFile.txt
